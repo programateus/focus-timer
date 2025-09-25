@@ -1,0 +1,56 @@
+services:
+  db:
+    build: ./.docker/postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.docker/postgres/data:/var/lib/postgresql/data
+      - ./.docker/sql:/docker-entrypoint-initdb.d
+    networks:
+      - organization-app
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - 5050:80
+    networks:
+      - organization-app
+
+  redis:
+    build:
+      context: .docker/redis
+      dockerfile: ./Dockerfile
+    ports:
+      - 6379:6379
+    volumes:
+      - ./.docker/redis/data:/data
+      - ./.docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - organization-app
+
+  redis-insight:
+    image: redis/redisinsight
+    ports:
+      - 5540:5540
+    networks:
+      - organization-app
+
+networks:
+  organization-app:
+    driver: bridge
