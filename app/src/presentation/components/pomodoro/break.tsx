@@ -8,9 +8,10 @@ export const Break = () => {
   return (
     <Timer
       initialMinutes={5}
-      title="Break Time"
+      title="Pause"
       progressColor="success"
       buttonColor="btn-success"
+      type="break"
       onComplete={handleBreakComplete}
     />
   );

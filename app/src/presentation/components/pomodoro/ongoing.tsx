@@ -8,10 +8,10 @@ export const Ongoing = () => {
   return (
     <Timer
       initialMinutes={25}
-      title="Focus Session"
+      title="Focus"
       progressColor="primary"
       buttonColor="btn-primary"
-      taskTitle="A veeeeeeeeeeeeeeeery very long task title that should be truncated more longer a little bit"
+      type="work"
       onComplete={handleSessionComplete}
     />
   );

@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@presentation/react-query/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastProvider } from "@presentation/providers/toast-provider";
+import { AuthProvider } from "@presentation/providers/auth-provider";
 
 import { routes } from "./presentation/routes";
 
@@ -17,7 +18,9 @@ function App() {
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
       <ToastProvider>
         <BrowserRouter>
-          <AppRoutes />
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
         </BrowserRouter>
       </ToastProvider>
     </QueryClientProvider>

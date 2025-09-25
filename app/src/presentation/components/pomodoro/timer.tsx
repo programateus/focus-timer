@@ -3,14 +3,16 @@ import { RiPlayFill, RiPauseFill, RiStopFill } from "react-icons/ri";
 import { Button } from "@presentation/components/button";
 import { Icon } from "@presentation/components/icon";
 import { useCountdown } from "@presentation/hooks/use-countdown";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useTaskStore } from "../../stores/task-store";
+import { usePomodoroStore } from "../../stores/pomodoro-store";
 
 interface TimerProps {
   initialMinutes: number;
   title: string;
   progressColor?: "primary" | "success" | "warning";
   buttonColor?: "btn-primary" | "btn-success" | "btn-warning";
-  taskTitle?: string;
+  type: "work" | "break";
   onComplete?: () => void;
 }
 
@@ -19,19 +21,41 @@ export const Timer = ({
   title,
   progressColor = "primary",
   buttonColor = "btn-primary",
-  taskTitle,
+  type,
   onComplete,
 }: TimerProps) => {
   const [startedAt, setStartedAt] = useState<Date | null>(null);
-  const { formattedTime, isRunning, progress, start, pause, stop, time } =
-    useCountdown({
-      initialMinutes,
-      onComplete,
-    });
+  const { selectedTask } = useTaskStore();
+  const { addSession } = usePomodoroStore();
+
+  const {
+    formattedTime,
+    isRunning,
+    progress,
+    start,
+    pause,
+    stop,
+    time,
+    reset,
+  } = useCountdown({
+    initialMinutes,
+    onComplete: () => {
+      if (startedAt && selectedTask) {
+        const completedAt = new Date();
+        addSession({
+          id: crypto.randomUUID(),
+          taskId: selectedTask.id,
+          duration: initialMinutes * 60,
+          startedAt,
+          completedAt,
+          type,
+        });
+      }
+      onComplete?.();
+    },
+  });
 
   const handleStart = () => {
-    // Atualiza o startedAt sempre que o timer é iniciado/retomado
-    // para recalcular o tempo de término baseado no tempo restante
     setStartedAt(new Date());
     start();
   };
@@ -44,6 +68,13 @@ export const Timer = ({
     setStartedAt(null);
     stop();
   };
+
+  useEffect(() => {
+    if (!isRunning) {
+      reset();
+      setStartedAt(null);
+    }
+  }, [selectedTask?.id, reset, isRunning]);
 
   const endTimeString = useMemo(() => {
     if (!startedAt || !isRunning) return "";
@@ -71,20 +102,24 @@ export const Timer = ({
 
         <div className="text-center">
           <h3 className="text-lg font-semibold">{title}</h3>
-        </div>
-
-        {taskTitle && (
-          <div className="w-full">
-            <p className="truncate text-center rounded-box bg-base-300 px-4 py-2">
-              {taskTitle}
+          {selectedTask && (
+            <p className="text-base-content/70 mt-1">
+              <span className="font-medium">{selectedTask.title}</span>
             </p>
-          </div>
-        )}
+          )}
+          {!selectedTask && type === "work" && (
+            <p className="text-warning mt-1">Select a task to start</p>
+          )}
+        </div>
       </div>
 
       <div className="space-x-4 mt-auto">
         {!isRunning ? (
-          <Button onClick={handleStart} className={buttonColor}>
+          <Button
+            onClick={handleStart}
+            className={buttonColor}
+            disabled={type === "work" && !selectedTask}
+          >
             <Icon Icon={RiPlayFill} />
             Start
           </Button>

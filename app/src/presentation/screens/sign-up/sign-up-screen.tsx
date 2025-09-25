@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Icon } from "@presentation/components/icon";
 import { Input } from "@presentation/components/input";
 import { Button } from "@presentation/components/button";
-import { useForm } from "@presentation/hooks/useForm/useForm";
+import { useForm } from "@presentation/hooks/use-form/use-form";
 import container from "@infra/inversify/container";
 import { SignUpUseCase } from "@application/use-cases/sign-up-use-case";
 
