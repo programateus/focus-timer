@@ -56,10 +56,7 @@ export class TokenIssuerResponseInterceptor
                 httpOnly: false,
                 secure: process.env.NODE_ENV === "production",
                 path: "/",
-                domain:
-                  process.env.NODE_ENV === "production"
-                    ? "habitcrafter.com"
-                    : "localhost",
+                domain: "localhost",
               });
               this.failedRequestQueue.forEach((request) =>
                 request.onSuccess(res.data.accessToken)
