@@ -20,8 +20,8 @@ export const TaskSwitchDialog = ({
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Trocar tarefa ativa?"
-      description={`Você está trabalhando em "${currentTaskTitle}". Trocar para "${newTaskTitle}" irá resetar o temporizador atual.`}
+      title="Switch Active Task?"
+      description={`You are currently on task "${currentTaskTitle}". Switching to "${newTaskTitle}" will reset the current timer.`}
     >
       <div className="flex justify-end gap-2">
         <Button className="btn-outline" onClick={onClose}>
