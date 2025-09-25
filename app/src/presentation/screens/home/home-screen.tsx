@@ -14,9 +14,11 @@ import {
   type Task as TaskType,
 } from "@presentation/stores/task-store";
 import Dialog from "@presentation/components/dialog";
+import { usePomodoroStore } from "@presentation/stores/pomodoro-store";
 
 export const HomeScreen = () => {
   const { tasks, selectedTask, selectTask, setTasks } = useTaskStore();
+  const { currentSession, setCurrentSession } = usePomodoroStore();
   const [showSwitchDialog, setShowSwitchDialog] = useState(false);
   const [pendingTask, setPendingTask] = useState<TaskType | null>(null);
   const [showAddTaskDialog, setShowAddTaskDialog] = useState(false);
@@ -58,7 +60,13 @@ export const HomeScreen = () => {
   const handleTaskSelect = (task: TaskType) => {
     if (selectedTask && selectedTask.id !== task.id) {
       setPendingTask(task);
-      setShowSwitchDialog(true);
+      if (currentSession) {
+        setShowSwitchDialog(true);
+      } else {
+        selectTask(task);
+        setPendingTask(null);
+        setCurrentSession(null);
+      }
     } else {
       selectTask(task.id === selectedTask?.id ? null : task);
     }
@@ -70,6 +78,7 @@ export const HomeScreen = () => {
     }
     setShowSwitchDialog(false);
     setPendingTask(null);
+    setCurrentSession(null);
   };
 
   const handleCancelSwitch = () => {

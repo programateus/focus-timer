@@ -11,9 +11,11 @@ export interface PomodoroSession {
 }
 
 interface PomodoroState {
+  currentSession: PomodoroSession | null;
   sessions: PomodoroSession[];
   totalPomodoros: number;
   totalBreaks: number;
+  setCurrentSession: (session: PomodoroSession | null) => void;
   addSession: (session: PomodoroSession) => void;
   setSessions: (sessions: PomodoroSession[]) => void;
   getStats: () => {
@@ -26,9 +28,12 @@ interface PomodoroState {
 export const usePomodoroStore = create<PomodoroState>()(
   persist(
     (set, get) => ({
+      currentSession: null,
       sessions: [],
       totalPomodoros: 0,
       totalBreaks: 0,
+      setCurrentSession: (session: PomodoroSession | null) =>
+        set({ currentSession: session }),
       addSession: (session) =>
         set((state) => ({
           sessions: [...state.sessions, session],

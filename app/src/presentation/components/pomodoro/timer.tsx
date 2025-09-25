@@ -3,7 +3,7 @@ import { RiPlayFill, RiPauseFill, RiStopFill } from "react-icons/ri";
 import { Button } from "@presentation/components/button";
 import { Icon } from "@presentation/components/icon";
 import { useCountdown } from "@presentation/hooks/use-countdown";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { useTaskStore } from "../../stores/task-store";
 import { usePomodoroStore } from "../../stores/pomodoro-store";
 
@@ -24,9 +24,8 @@ export const Timer = ({
   type,
   onComplete,
 }: TimerProps) => {
-  const [startedAt, setStartedAt] = useState<Date | null>(null);
   const { selectedTask } = useTaskStore();
-  const { addSession } = usePomodoroStore();
+  const { addSession, setCurrentSession, currentSession } = usePomodoroStore();
 
   const {
     formattedTime,
@@ -40,15 +39,11 @@ export const Timer = ({
   } = useCountdown({
     initialMinutes,
     onComplete: () => {
-      if (startedAt && selectedTask) {
+      if (currentSession && selectedTask) {
         const completedAt = new Date();
         addSession({
-          id: crypto.randomUUID(),
-          taskId: selectedTask.id,
-          duration: initialMinutes * 60,
-          startedAt,
+          ...currentSession,
           completedAt,
-          type,
         });
       }
       onComplete?.();
@@ -56,7 +51,17 @@ export const Timer = ({
   });
 
   const handleStart = () => {
-    setStartedAt(new Date());
+    if (!selectedTask) {
+      return;
+    }
+    setCurrentSession({
+      id: crypto.randomUUID(),
+      taskId: selectedTask.id,
+      duration: initialMinutes * 60,
+      startedAt: new Date(),
+      completedAt: new Date(0),
+      type,
+    });
     start();
   };
 
@@ -65,25 +70,30 @@ export const Timer = ({
   };
 
   const handleStop = () => {
-    setStartedAt(null);
+    setCurrentSession(null);
     stop();
   };
 
   useEffect(() => {
     if (!isRunning) {
       reset();
-      setStartedAt(null);
     }
   }, [selectedTask?.id, reset, isRunning]);
 
+  useEffect(() => {
+    if (!currentSession) {
+      reset();
+    }
+  }, [currentSession, reset]);
+
   const endTimeString = useMemo(() => {
-    if (!startedAt || !isRunning) return "";
-    const endTime = new Date(startedAt.getTime() + time * 1000);
+    if (!currentSession?.startedAt || !isRunning) return "";
+    const endTime = new Date(currentSession.startedAt.getTime() + time * 1000);
     return `Ends at ${endTime.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     })}`;
-  }, [startedAt, time, isRunning]);
+  }, [currentSession?.startedAt, time, isRunning]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-4 min-w-0">
