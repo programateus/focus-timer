@@ -28,6 +28,23 @@ export class PrismaUserRepository implements UserRepository {
       data: { name, email, password: password! },
     });
   }
+
+  findById(id: string, options?: FindUserOptions): Promise<User | null> {
+    return this.prismaService.user.findUnique({
+      where: { id },
+      omit: {
+        password: !options?.includePassword,
+      },
+    });
+  }
+
+  update(user: User): Promise<User> {
+    const { id, name, email, password } = user;
+    return this.prismaService.user.update({
+      where: { id },
+      data: { name, email, password },
+    });
+  }
 }
 
 export const prismaUserRepositoryProvider: Provider = {

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth-module';
 import { RedisModule } from '@infra/redis/redis-module';
+import { ProfileModule } from './modules/profile-module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { RedisModule } from '@infra/redis/redis-module';
     }),
 
     AuthModule,
+    ProfileModule,
   ],
 })
 export class MainModule {}

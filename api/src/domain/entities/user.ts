@@ -19,4 +19,15 @@ export class User {
     const user = new User(id, name, email, password, createdAt, updatedAt);
     return user;
   }
+
+  static update(user: User, data: Partial<User>) {
+    return new User(
+      user.id,
+      data.name ?? user.name,
+      data.email ?? user.email,
+      data.password ?? user.password,
+      user.createdAt,
+      new Date(),
+    );
+  }
 }

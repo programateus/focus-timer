@@ -1,6 +1,8 @@
+import { AccessTokenIssuerUseCase } from '@application/use-cases/auth/access-token-issuer/access-token-issuer-use-case';
 import { SignInUseCase } from '@application/use-cases/auth/sign-in/sign-in-use-case';
 import { SignUpUseCase } from '@application/use-cases/auth/sign-up/sign-up-use-case';
 import { Body, Controller, Post } from '@nestjs/common';
+import { IssueTokenDTO } from '@presentation/dtos/issue-token-dto';
 
 import { SignInDTO } from '@presentation/dtos/sign-in-dto';
 import { SignUpDTO } from '@presentation/dtos/sign-up-dto';
@@ -10,6 +12,7 @@ export class AuthController {
   constructor(
     private readonly signUpUseCase: SignUpUseCase,
     private readonly signInUseCase: SignInUseCase,
+    private readonly accessTokenIssuerUseCase: AccessTokenIssuerUseCase,
   ) {}
 
   /**
@@ -35,5 +38,22 @@ export class AuthController {
   @Post('/sign-up')
   signUp(@Body() data: SignUpDTO) {
     return this.signUpUseCase.execute(data);
+  }
+
+  /**
+   * Issue new access token
+   *
+   * @remarks This operation allows you to issue a new access token using a valid refresh token.
+   *
+   * @throws {401} Invalid refresh token.
+   */
+  @Post('issue-token')
+  async issueToken(@Body() body: IssueTokenDTO) {
+    const accessToken = await this.accessTokenIssuerUseCase.execute(
+      body.refreshToken,
+    );
+    return {
+      accessToken,
+    };
   }
 }
