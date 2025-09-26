@@ -10,6 +10,16 @@ type TaskMenuProps = {
 };
 
 export const TaskMenu = ({ onUpdate, onDelete }: TaskMenuProps) => {
+  const handleUpdate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onUpdate();
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onDelete();
+  };
+
   return (
     <Menu as="div" className="relative">
       <MenuButton
@@ -26,10 +36,10 @@ export const TaskMenu = ({ onUpdate, onDelete }: TaskMenuProps) => {
         className="menu [--anchor-gap:8px] bg-base-100 rounded-box min-w-80 lg:min-w-64 z-10 border-base-content/10 border shadow-lg focus:outline-none focus-visible:outline-none focus-within:outline-none"
       >
         <MenuItem as="li">
-          <button onClick={onUpdate}>Update</button>
+          <button onClick={handleUpdate}>Update</button>
         </MenuItem>
         <MenuItem as="li">
-          <button onClick={onDelete}>Delete</button>
+          <button onClick={handleDelete}>Delete</button>
         </MenuItem>
       </MenuItems>
     </Menu>
