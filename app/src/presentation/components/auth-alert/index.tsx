@@ -10,6 +10,8 @@ export const AuthAlert = () => {
   const [isVisible, setIsVisible] = useState(true);
   const { isAuthenticated } = useAuth();
 
+  console.log(isAuthenticated);
+
   if (!isVisible || isAuthenticated) return null;
 
   return (

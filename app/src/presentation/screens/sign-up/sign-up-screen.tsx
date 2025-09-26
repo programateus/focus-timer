@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router";
 import { HiOutlineXCircle } from "react-icons/hi";
 import { z } from "zod";
 
@@ -10,6 +10,7 @@ import { Button } from "@presentation/components/button";
 import { useForm } from "@presentation/hooks/use-form/use-form";
 import container from "@infra/inversify/container";
 import { SignUpUseCase } from "@application/use-cases/sign-up-use-case";
+import { useAuth } from "@presentation/hooks/use-auth";
 
 const signUpUseCase = container.get(SignUpUseCase);
 
@@ -27,7 +28,7 @@ const validationSchema = z
 
 export const SignUpScreen = () => {
   const [signUpError, setSignUpError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const { loadData } = useAuth();
   const { errors, isSubmitting, touched, getFieldProps, handleSubmit } =
     useForm({
       initialValues: {
@@ -45,12 +46,15 @@ export const SignUpScreen = () => {
             email: values.email,
             password: values.password,
           });
-          navigate("/");
+          await loadData();
         } catch (error) {
           setIsSubmitting(false);
           if (error instanceof AxiosError) {
             if (error.status === 401) {
               setSignUpError("Invalid email or password.");
+            }
+            if (error.status === 409) {
+              setSignUpError("User already exists.");
             }
           }
         }

@@ -20,8 +20,8 @@ export class SignUpUseCase {
 
   async execute(data: SignUpDTO): Promise<void> {
     const tokens = await this.authClient.signUp(data);
-    this.tokenStorage.save("access-token", tokens.accessToken);
-    this.tokenStorage.save("refresh-token", tokens.refreshToken);
+    this.tokenStorage.save("access_token", tokens.accessToken);
+    this.tokenStorage.save("refresh_token", tokens.refreshToken);
   }
 }
 

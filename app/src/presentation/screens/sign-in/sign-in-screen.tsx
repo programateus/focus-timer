@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router";
 import { HiOutlineXCircle } from "react-icons/hi";
 import { AxiosError } from "axios";
 
@@ -10,6 +10,7 @@ import { useForm } from "@presentation/hooks/use-form/use-form";
 import z from "zod";
 import container from "@infra/inversify/container";
 import { SignInUseCase } from "@application/use-cases/sign-in-use-case";
+import { useAuth } from "@presentation/hooks/use-auth";
 
 const validationSchema = z.object({
   email: z.email("Invalid email address"),
@@ -20,22 +21,22 @@ const signInUseCase = container.get(SignInUseCase);
 
 export const SignInScreen = () => {
   const [signInError, setSignInError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const { loadData } = useAuth();
   const { errors, isSubmitting, touched, getFieldProps, handleSubmit } =
     useForm({
       initialValues: {
         email: "",
         password: "",
       },
-      onSubmit(values, { setIsSubmitting }) {
+      async onSubmit(values, { setIsSubmitting }) {
         try {
           setIsSubmitting(true);
           setSignInError(null);
-          navigate("/");
-          signInUseCase.execute({
+          await signInUseCase.execute({
             email: values.email,
             password: values.password,
           });
+          await loadData();
         } catch (error) {
           setIsSubmitting(false);
           if (error instanceof AxiosError) {
