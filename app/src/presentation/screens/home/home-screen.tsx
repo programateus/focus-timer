@@ -1,12 +1,12 @@
 import { RiAddFill } from "react-icons/ri";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Button } from "@presentation/components/button";
 import { Icon } from "@presentation/components/icon";
 import { Task } from "@presentation/components/task";
 import { AuthAlert } from "@presentation/components/auth-alert";
 import { TaskSwitchDialog } from "@presentation/components/task-switch-dialog";
-import { AddTaskForm } from "@presentation/components/add-task-form";
+import { TaskForm } from "@presentation/components/task-form";
 import { PomodoroStats } from "@presentation/components/pomodoro-stats";
 import { Pomodoro } from "@presentation/components/pomodoro/pomodoro";
 import {
@@ -17,43 +17,11 @@ import Dialog from "@presentation/components/dialog";
 import { usePomodoroStore } from "@presentation/stores/pomodoro-store";
 
 export const HomeScreen = () => {
-  const { tasks, selectedTask, selectTask, setTasks } = useTaskStore();
+  const { tasks, selectedTask, selectTask } = useTaskStore();
   const { currentSession, setCurrentSession } = usePomodoroStore();
   const [showSwitchDialog, setShowSwitchDialog] = useState(false);
   const [pendingTask, setPendingTask] = useState<TaskType | null>(null);
   const [showAddTaskDialog, setShowAddTaskDialog] = useState(false);
-
-  useEffect(() => {
-    if (tasks.length === 0) {
-      const demoTasks: TaskType[] = [
-        {
-          id: "1",
-          title: "Estudar React e TypeScript",
-          description: "Completar o curso de React com TypeScript",
-          completed: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "2",
-          title: "Implementar sistema de pomodoro",
-          description: "Criar funcionalidade completa de pomodoro timer",
-          completed: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "3",
-          title: "Revisar código do projeto",
-          description: "Fazer code review e melhorias",
-          completed: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-      setTasks(demoTasks);
-    }
-  }, [tasks.length, setTasks]);
 
   const displayTasks = tasks;
 
@@ -68,7 +36,7 @@ export const HomeScreen = () => {
         setCurrentSession(null);
       }
     } else {
-      selectTask(task.id === selectedTask?.id ? null : task);
+      selectTask(task);
     }
   };
 
@@ -144,7 +112,7 @@ export const HomeScreen = () => {
         onClose={() => setShowAddTaskDialog(false)}
         title="New Task"
       >
-        <AddTaskForm onClose={() => setShowAddTaskDialog(false)} />
+        <TaskForm onClose={() => setShowAddTaskDialog(false)} />
       </Dialog>
     </div>
   );

@@ -5,10 +5,11 @@ import { useForm } from "@presentation/hooks/use-form/use-form";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Textarea } from "../textarea";
-import { useTaskStore } from "../../stores/task-store";
+import { useTaskStore, type Task } from "../../stores/task-store";
 
-interface AddTaskFormProps {
-  onClose: () => void;
+interface TaskFormProps {
+  onClose?: () => void;
+  task?: Task;
 }
 
 const validationSchema = z.object({
@@ -16,10 +17,24 @@ const validationSchema = z.object({
   description: z.string().optional(),
 });
 
-export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
+export const TaskForm = ({ onClose, task }: TaskFormProps) => {
+  const { addTask, updateTask } = useTaskStore();
   const { values, errors, touched, getFieldProps, handleSubmit } = useForm({
-    initialValues: { title: "", description: "" },
+    initialValues: {
+      title: task?.title || "",
+      description: task?.description || "",
+    },
     onSubmit: (values, { resetForm }) => {
+      if (task) {
+        updateTask(task.id, {
+          ...task,
+          title: values.title.trim(),
+          description: values.description?.trim() || undefined,
+          updatedAt: new Date(),
+        });
+        onClose?.();
+        return;
+      }
       addTask({
         id: crypto.randomUUID(),
         title: values.title.trim(),
@@ -28,13 +43,13 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      onClose();
+      onClose?.();
       resetForm();
     },
     validationSchema,
     validateOnChange: true,
+    enableReinitialize: true,
   });
-  const { addTask } = useTaskStore();
 
   return (
     <div className="space-y-4">

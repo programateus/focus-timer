@@ -1,7 +1,15 @@
-import { RiTimeLine } from "react-icons/ri";
-import { useTaskStore, type Task as TaskType } from "../../stores/task-store";
-import { Icon } from "../icon";
 import cn from "@presentation/utils/cn";
+
+import {
+  useTaskStore,
+  type Task as TaskType,
+} from "@presentation/stores/task-store";
+import { TaskMenu } from "./menu";
+import { useReducer } from "react";
+import { dialogReducer, initialState } from "../dialog/dialog-reducer";
+import Dialog from "../dialog";
+import { TaskForm } from "../task-form";
+import { DeleteTask } from "../delete-task";
 
 interface TaskProps {
   task: TaskType;
@@ -11,6 +19,7 @@ interface TaskProps {
 export const Task = ({ task, onSelect }: TaskProps) => {
   const { selectedTask, updateTask } = useTaskStore();
   const isSelected = selectedTask?.id === task.id;
+  const [dialogState, dispatch] = useReducer(dialogReducer, initialState);
 
   const handleClick = () => {
     onSelect?.(task);
@@ -22,6 +31,30 @@ export const Task = ({ task, onSelect }: TaskProps) => {
       completed: !task.completed,
       updatedAt: new Date(),
     });
+  };
+
+  const handleUpdateClick = () => {
+    dispatch({
+      type: "OPEN",
+      payload: {
+        title: "Update Task",
+        content: <TaskForm onClose={handleCloseDialog} task={task} />,
+      },
+    });
+  };
+
+  const handleDeleteClick = () => {
+    dispatch({
+      type: "OPEN",
+      payload: {
+        title: "Update Task",
+        content: <DeleteTask onClose={handleCloseDialog} task={task} />,
+      },
+    });
+  };
+
+  const handleCloseDialog = () => {
+    dispatch({ type: "CLOSE" });
   };
 
   return (
@@ -60,16 +93,23 @@ export const Task = ({ task, onSelect }: TaskProps) => {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {isSelected && (
-              <div className="badge badge-primary badge-sm">
-                <Icon Icon={RiTimeLine} size="xs" />
-                Ativa
-              </div>
-            )}
+          <div className="flex flex-col items-end gap-2">
+            <TaskMenu
+              onDelete={handleDeleteClick}
+              onUpdate={handleUpdateClick}
+            />
           </div>
         </div>
       </div>
+
+      <Dialog
+        isOpen={dialogState.isOpen}
+        title={dialogState.title || ""}
+        description={dialogState.description || ""}
+        onClose={handleCloseDialog}
+      >
+        {dialogState.content}
+      </Dialog>
     </div>
   );
 };
