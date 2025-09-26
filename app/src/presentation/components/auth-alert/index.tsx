@@ -23,7 +23,9 @@ export const AuthAlert = () => {
         </div>
       </div>
       <div className="flex gap-2">
-        <Button className="btn-outline btn-sm">Log In</Button>
+        <Button className="btn-outline btn-sm" to="/sign-in">
+          Log In
+        </Button>
         <Button
           className="btn-ghost btn-sm"
           onClick={() => setIsVisible(false)}
