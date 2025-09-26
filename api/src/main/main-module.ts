@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth-module';
 import { RedisModule } from '@infra/redis/redis-module';
 import { ProfileModule } from './modules/profile-module';
+import { TasksControllerModule } from './modules/tasks-module';
+import { PomodorosControllerModule } from './modules/pomodoros-module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { ProfileModule } from './modules/profile-module';
 
     AuthModule,
     ProfileModule,
+    TasksControllerModule,
+    PomodorosControllerModule,
   ],
 })
 export class MainModule {}
