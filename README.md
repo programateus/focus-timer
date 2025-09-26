@@ -3,7 +3,7 @@
 > [!WARNING]  
 > Este projeto ainda está em desenvolvimento
 
-Uma aplicação de timer Pomodoro construída com API NestJS e um frontend moderno, usando PostgreSQL e React Query para cache.
+Uma aplicação de timer Pomodoro construída com NestJS e React, usando PostgreSQL e React Query para cache.
 
 ## 📋 Pré-requisitos
 
