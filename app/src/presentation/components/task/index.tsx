@@ -1,15 +1,15 @@
-import cn from "@presentation/utils/cn";
-
-import {
-  useTaskStore,
-  type Task as TaskType,
-} from "@presentation/stores/task-store";
-import { TaskMenu } from "./menu";
 import { useReducer } from "react";
-import { dialogReducer, initialState } from "../dialog/dialog-reducer";
+
+import cn from "@presentation/utils/cn";
+import { useTaskStore } from "@presentation/stores/task-store";
+import type { Task as TaskType } from "@domain/entities/task";
+
 import Dialog from "../dialog";
 import { TaskForm } from "../task-form";
 import { DeleteTask } from "../delete-task";
+import { dialogReducer, initialState } from "../dialog/dialog-reducer";
+
+import { TaskMenu } from "./menu";
 
 interface TaskProps {
   task: TaskType;

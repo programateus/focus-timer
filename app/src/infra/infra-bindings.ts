@@ -5,6 +5,7 @@ import { axiosHttpClientBinding } from "./axios/AxiosHttpClient";
 import { axiosBinding } from "./axios/axios";
 import { cookiesBinding } from "./cookies/universal-cookies";
 import { httpProfileClientBinding } from "./clients/http-profile-client";
+import { httpTaskClientBinding } from "./clients/http-task-client";
 
 export const infraBindings: BindingDefinition[] = [
   cookieTokenStorageBinding,
@@ -13,4 +14,5 @@ export const infraBindings: BindingDefinition[] = [
   axiosHttpClientBinding,
   httpAuthClientBinding,
   httpProfileClientBinding,
+  httpTaskClientBinding,
 ];

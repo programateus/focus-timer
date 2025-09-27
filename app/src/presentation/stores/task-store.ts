@@ -1,14 +1,6 @@
+import type { Task } from "@domain/entities/task";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-export interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  completed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 interface TaskState {
   tasks: Task[];

@@ -1,3 +1,5 @@
 import { mergeQueryKeys } from "@lukemorales/query-key-factory";
 
-export const queryKeys = mergeQueryKeys();
+import { taskKeys } from "./task";
+
+export const queryKeys = mergeQueryKeys(taskKeys);

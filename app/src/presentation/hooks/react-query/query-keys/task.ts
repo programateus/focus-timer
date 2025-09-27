@@ -1,3 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 
-export const taskKeys = createQueryKeys("task", {});
+export const taskKeys = createQueryKeys("task", {
+  list: () => ["list"],
+});

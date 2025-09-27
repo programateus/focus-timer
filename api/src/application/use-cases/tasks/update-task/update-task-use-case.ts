@@ -9,8 +9,8 @@ import { Task } from '@domain/entities/task';
 import {
   TaskRepository,
   TaskRepositoryIdentifier,
-  UpdateTaskDto,
 } from '@domain/repositories/task-repository';
+import { UpdateTaskDTO } from '@application/dtos/update-task-dto';
 
 @Injectable()
 export class UpdateTaskUseCase {
@@ -21,7 +21,7 @@ export class UpdateTaskUseCase {
 
   async execute(
     id: string,
-    data: UpdateTaskDto,
+    data: UpdateTaskDTO,
     userId: string,
   ): Promise<Task> {
     const task = await this.taskRepository.findById(id);

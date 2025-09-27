@@ -7,7 +7,7 @@ import {
   IsNotEmpty,
 } from 'class-validator';
 
-export class CreatePomodoroDto {
+export class CreatePomodoroDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

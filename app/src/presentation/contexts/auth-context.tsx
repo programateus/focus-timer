@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { User } from "@domain/entities/User";
+import { User } from "@domain/entities/user";
 
 type AuthContextParams = {
   isAuthenticated: boolean;

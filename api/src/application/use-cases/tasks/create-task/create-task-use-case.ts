@@ -2,10 +2,10 @@ import { Inject, Injectable, Provider } from '@nestjs/common';
 
 import { Task } from '@domain/entities/task';
 import {
-  CreateTaskDto,
   TaskRepository,
   TaskRepositoryIdentifier,
 } from '@domain/repositories/task-repository';
+import { CreateTaskDTO } from '@application/dtos/create-task-dto';
 
 @Injectable()
 export class CreateTaskUseCase {
@@ -14,7 +14,7 @@ export class CreateTaskUseCase {
     private readonly taskRepository: TaskRepository,
   ) {}
 
-  async execute(data: CreateTaskDto): Promise<Task> {
+  async execute(data: CreateTaskDTO): Promise<Task> {
     return this.taskRepository.create(data);
   }
 }

@@ -1,11 +1,12 @@
 import z from "zod";
 
+import type { Task } from "@domain/entities/task";
 import { useForm } from "@presentation/hooks/use-form/use-form";
 
 import { Button } from "../button";
 import { Input } from "../input";
 import { Textarea } from "../textarea";
-import { useTaskStore, type Task } from "../../stores/task-store";
+import { useTaskStore } from "../../stores/task-store";
 
 interface TaskFormProps {
   onClose?: () => void;
@@ -38,7 +39,7 @@ export const TaskForm = ({ onClose, task }: TaskFormProps) => {
       addTask({
         id: crypto.randomUUID(),
         title: values.title.trim(),
-        description: values.description?.trim() || undefined,
+        description: values.description?.trim() || null,
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),

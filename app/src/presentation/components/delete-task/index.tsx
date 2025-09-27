@@ -1,4 +1,5 @@
-import { useTaskStore, type Task } from "@presentation/stores/task-store";
+import type { Task } from "@domain/entities/task";
+import { useTaskStore } from "@presentation/stores/task-store";
 
 import { Button } from "../button";
 
