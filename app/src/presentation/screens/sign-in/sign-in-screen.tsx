@@ -9,7 +9,7 @@ import { Input } from "@presentation/components/input";
 import { useForm } from "@presentation/hooks/use-form/use-form";
 import z from "zod";
 import container from "@infra/inversify/container";
-import { SignInUseCase } from "@application/use-cases/sign-in-use-case";
+import { SignInUseCase } from "@application/use-cases/auth/sign-in-use-case";
 import { useAuth } from "@presentation/hooks/use-auth";
 
 const validationSchema = z.object({

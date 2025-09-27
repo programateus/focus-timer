@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { User } from "@domain/entities/User";
 import container from "@infra/inversify/container";
 import { AuthContext } from "@presentation/contexts/auth-context";
-import { ProfileDataLoaderUseCase } from "@application/use-cases/profile-data-loader-use-case";
+import { ProfileDataLoaderUseCase } from "@application/use-cases/profile/profile-data-loader-use-case";
 
 type AuthProviderProps = {
   children: React.ReactNode;

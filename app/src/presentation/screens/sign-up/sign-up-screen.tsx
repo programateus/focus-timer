@@ -9,7 +9,7 @@ import { Input } from "@presentation/components/input";
 import { Button } from "@presentation/components/button";
 import { useForm } from "@presentation/hooks/use-form/use-form";
 import container from "@infra/inversify/container";
-import { SignUpUseCase } from "@application/use-cases/sign-up-use-case";
+import { SignUpUseCase } from "@application/use-cases/auth/sign-up-use-case";
 import { useAuth } from "@presentation/hooks/use-auth";
 
 const signUpUseCase = container.get(SignUpUseCase);
