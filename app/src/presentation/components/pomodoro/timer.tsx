@@ -140,7 +140,11 @@ export const Timer = ({
           </Button>
         )}
 
-        <Button onClick={handleStop} className="btn-outline">
+        <Button
+          onClick={handleStop}
+          className="btn-outline"
+          disabled={!isRunning}
+        >
           <Icon Icon={RiStopFill} />
           Stop
         </Button>
