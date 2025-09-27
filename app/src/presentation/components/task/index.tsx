@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 
 import cn from "@presentation/utils/cn";
-import { useTaskStore } from "@presentation/stores/task-store";
+import { useTasks } from "@presentation/hooks/use-tasks";
 import type { Task as TaskType } from "@domain/entities/task";
 
 import Dialog from "../dialog";
@@ -17,7 +17,7 @@ interface TaskProps {
 }
 
 export const Task = ({ task, onSelect }: TaskProps) => {
-  const { selectedTask, updateTask } = useTaskStore();
+  const { selectedTask, updateTask } = useTasks();
   const isSelected = selectedTask?.id === task.id;
   const [dialogState, dispatch] = useReducer(dialogReducer, initialState);
 
@@ -29,7 +29,6 @@ export const Task = ({ task, onSelect }: TaskProps) => {
     e.stopPropagation();
     updateTask(task.id, {
       completed: !task.completed,
-      updatedAt: new Date(),
     });
   };
 

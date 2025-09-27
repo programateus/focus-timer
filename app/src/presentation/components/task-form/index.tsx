@@ -1,12 +1,13 @@
 import z from "zod";
 
 import type { Task } from "@domain/entities/task";
+import { useToast } from "@presentation/hooks/use-toast";
 import { useForm } from "@presentation/hooks/use-form/use-form";
 
 import { Button } from "../button";
 import { Input } from "../input";
 import { Textarea } from "../textarea";
-import { useTaskStore } from "../../stores/task-store";
+import { useTasks } from "../../hooks/use-tasks";
 
 interface TaskFormProps {
   onClose?: () => void;
@@ -19,38 +20,45 @@ const validationSchema = z.object({
 });
 
 export const TaskForm = ({ onClose, task }: TaskFormProps) => {
-  const { addTask, updateTask } = useTaskStore();
-  const { values, errors, touched, getFieldProps, handleSubmit } = useForm({
-    initialValues: {
-      title: task?.title || "",
-      description: task?.description || "",
-    },
-    onSubmit: (values, { resetForm }) => {
-      if (task) {
-        updateTask(task.id, {
-          ...task,
+  const { addTask, updateTask } = useTasks();
+  const { addToast } = useToast();
+  const { errors, isSubmitting, touched, getFieldProps, handleSubmit } =
+    useForm({
+      initialValues: {
+        title: task?.title || "",
+        description: task?.description || "",
+      },
+      onSubmit: async (values, { resetForm }) => {
+        if (task) {
+          await updateTask(task.id, {
+            title: values.title.trim(),
+            description: values.description?.trim() || undefined,
+          });
+          resetForm();
+          addToast({
+            type: "success",
+            message: "Task updated successfully",
+          });
+          onClose?.();
+          return;
+        }
+
+        await addTask({
           title: values.title.trim(),
           description: values.description?.trim() || undefined,
-          updatedAt: new Date(),
+        });
+
+        resetForm();
+        addToast({
+          type: "success",
+          message: "Task added successfully",
         });
         onClose?.();
-        return;
-      }
-      addTask({
-        id: crypto.randomUUID(),
-        title: values.title.trim(),
-        description: values.description?.trim() || null,
-        completed: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      onClose?.();
-      resetForm();
-    },
-    validationSchema,
-    validateOnChange: true,
-    enableReinitialize: true,
-  });
+      },
+      validationSchema,
+      validateOnChange: true,
+      enableReinitialize: true,
+    });
 
   return (
     <div className="space-y-4">
@@ -80,13 +88,18 @@ export const TaskForm = ({ onClose, task }: TaskFormProps) => {
         />
 
         <div className="flex justify-end gap-2">
-          <Button type="button" className="btn-outline" onClick={onClose}>
+          <Button
+            type="button"
+            className="btn-outline"
+            onClick={onClose}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             className="btn-primary"
-            disabled={!values.title.trim()}
+            isLoading={isSubmitting}
           >
             Save
           </Button>

@@ -1,5 +1,5 @@
 import type { Task } from "@domain/entities/task";
-import { useTaskStore } from "@presentation/stores/task-store";
+import { useTasks } from "@presentation/hooks/use-tasks";
 
 import { Button } from "../button";
 
@@ -9,7 +9,7 @@ type DeleteTaskProps = {
 };
 
 export const DeleteTask = ({ onClose, task }: DeleteTaskProps) => {
-  const { deleteTask } = useTaskStore();
+  const { deleteTask } = useTasks();
 
   const handleDelete = () => {
     deleteTask(task.id);

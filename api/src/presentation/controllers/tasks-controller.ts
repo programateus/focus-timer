@@ -17,9 +17,9 @@ import { UpdateTaskUseCase } from '@application/use-cases/tasks/update-task/upda
 import { DeleteTaskUseCase } from '@application/use-cases/tasks/delete-task/delete-task-use-case';
 import { JwtAuthGuard } from '@presentation/guards/jwt-auth-guard';
 
-import { CreateTaskDto } from '@presentation/dtos/create-task-dto';
-import { UpdateTaskDto } from '@presentation/dtos/update-task-dto';
 import { RequestUser, User } from '@presentation/decorators/user';
+import { CreateTaskDTO } from '@presentation/dtos/create-task-dto';
+import { UpdateTaskDTO } from '@presentation/dtos/update-task-dto';
 
 @ApiTags('tasks')
 @ApiBearerAuth()
@@ -34,7 +34,7 @@ export class TasksController {
   ) {}
 
   @Post()
-  async create(@User() user: RequestUser, @Body() body: CreateTaskDto) {
+  async create(@User() user: RequestUser, @Body() body: CreateTaskDTO) {
     return this.createTaskUseCase.execute({
       ...body,
       userId: user.id,
@@ -49,7 +49,7 @@ export class TasksController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() body: UpdateTaskDto,
+    @Body() body: UpdateTaskDTO,
     @User() user: RequestUser,
   ) {
     return this.updateTaskUseCase.execute(id, body, user.id);

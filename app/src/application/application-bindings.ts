@@ -4,6 +4,8 @@ import { signInUseCaseBinding } from "./use-cases/auth/sign-in-use-case";
 import { profileDataLoaderUseCaseBinding } from "./use-cases/profile/profile-data-loader-use-case";
 import { createTaskUseCaseBinding } from "./use-cases/task/create-task-use-case";
 import { listTaskUseCaseBinding } from "./use-cases/task/list-task-use-case";
+import { updateTaskUseCaseBinding } from "./use-cases/task/update-task-use-case";
+import { deleteTaskUseCaseBinding } from "./use-cases/task/delete-task-use-case";
 
 export const applicationBindings: BindingDefinition[] = [
   signUpUseCaseBinding,
@@ -11,4 +13,6 @@ export const applicationBindings: BindingDefinition[] = [
   profileDataLoaderUseCaseBinding,
   createTaskUseCaseBinding,
   listTaskUseCaseBinding,
+  updateTaskUseCaseBinding,
+  deleteTaskUseCaseBinding,
 ];

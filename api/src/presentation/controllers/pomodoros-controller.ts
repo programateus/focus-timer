@@ -12,8 +12,8 @@ import { CreatePomodoroUseCase } from '@application/use-cases/pomodoros/create-p
 import { GetPomodorosUseCase } from '@application/use-cases/pomodoros/get-pomodoros/get-pomodoros-use-case';
 import { JwtAuthGuard } from '@presentation/guards/jwt-auth-guard';
 
-import { CreatePomodoroDto } from '@presentation/dtos/create-pomodoro-dto';
 import { RequestUser, User } from '@presentation/decorators/user';
+import { CreatePomodoroDTO } from '@application/dtos/create-pomodoro-dto';
 
 @ApiTags('pomodoros')
 @ApiBearerAuth()
@@ -26,7 +26,7 @@ export class PomodorosController {
   ) {}
 
   @Post()
-  async create(@Body() body: CreatePomodoroDto) {
+  async create(@Body() body: CreatePomodoroDTO) {
     return this.createPomodoroUseCase.execute({
       ...body,
       startedAt: new Date(body.startedAt),

@@ -2,10 +2,10 @@ import { Inject, Injectable, Provider } from '@nestjs/common';
 
 import { Pomodoro } from '@domain/entities/pomodoro';
 import {
-  CreatePomodoroDto,
   PomodoroRepository,
   PomodoroRepositoryIdentifier,
 } from '@domain/repositories/pomodoro-repository';
+import { CreatePomodoroDTO } from '@application/dtos/create-pomodoro-dto';
 
 @Injectable()
 export class CreatePomodoroUseCase {
@@ -14,7 +14,7 @@ export class CreatePomodoroUseCase {
     private readonly pomodoroRepository: PomodoroRepository,
   ) {}
 
-  async execute(data: CreatePomodoroDto): Promise<Pomodoro> {
+  async execute(data: CreatePomodoroDTO): Promise<Pomodoro> {
     return this.pomodoroRepository.create(data);
   }
 }

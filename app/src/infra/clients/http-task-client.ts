@@ -9,6 +9,7 @@ import {
   type HttpClient,
 } from "@application/contracts/http-client";
 import type { CreateTaskDTO } from "@application/dtos/create-task-dto";
+import type { UpdateTaskDTO } from "@application/dtos/update-task-dto";
 import type { Task } from "@domain/entities/task";
 import type { BindingDefinition } from "@infra/inversify/types";
 
@@ -24,6 +25,14 @@ export class HttpTaskClient implements TaskClient {
 
   list(): Promise<Task[]> {
     return this.httpClient.get("/api/tasks");
+  }
+
+  update(id: string, data: UpdateTaskDTO): Promise<Task> {
+    return this.httpClient.put(`/api/tasks/${id}`, data);
+  }
+
+  delete(id: string): Promise<void> {
+    return this.httpClient.delete(`/api/tasks/${id}`);
   }
 }
 

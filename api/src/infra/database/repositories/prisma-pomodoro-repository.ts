@@ -2,18 +2,18 @@ import { Injectable, Provider } from '@nestjs/common';
 
 import { Pomodoro } from '@domain/entities/pomodoro';
 import {
-  CreatePomodoroDto,
   PomodoroRepository,
   PomodoroRepositoryIdentifier,
 } from '@domain/repositories/pomodoro-repository';
 
 import { PrismaService } from '../prisma-service';
+import { CreatePomodoroDTO } from '@application/dtos/create-pomodoro-dto';
 
 @Injectable()
 export class PrismaPomodoroRepository implements PomodoroRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(data: CreatePomodoroDto): Promise<Pomodoro> {
+  async create(data: CreatePomodoroDTO): Promise<Pomodoro> {
     const pomodoro = await this.prismaService.pomodoro.create({
       data,
     });

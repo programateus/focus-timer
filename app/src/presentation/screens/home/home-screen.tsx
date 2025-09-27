@@ -9,13 +9,13 @@ import { TaskSwitchDialog } from "@presentation/components/task-switch-dialog";
 import { TaskForm } from "@presentation/components/task-form";
 import { PomodoroStats } from "@presentation/components/pomodoro-stats";
 import { Pomodoro } from "@presentation/components/pomodoro/pomodoro";
-import { useTaskStore } from "@presentation/stores/task-store";
+import { useTasks } from "@presentation/hooks/use-tasks";
 import Dialog from "@presentation/components/dialog";
 import { usePomodoroStore } from "@presentation/stores/pomodoro-store";
 import type { Task as TaskType } from "@domain/entities/task";
 
 export const HomeScreen = () => {
-  const { tasks, selectedTask, selectTask } = useTaskStore();
+  const { tasks, selectedTask, selectTask } = useTasks();
   const { currentSession, setCurrentSession } = usePomodoroStore();
   const [showSwitchDialog, setShowSwitchDialog] = useState(false);
   const [pendingTask, setPendingTask] = useState<TaskType | null>(null);

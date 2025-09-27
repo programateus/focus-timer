@@ -2,19 +2,19 @@ import { Injectable, Provider } from '@nestjs/common';
 
 import { Task } from '@domain/entities/task';
 import {
-  CreateTaskDto,
   TaskRepository,
   TaskRepositoryIdentifier,
-  UpdateTaskDto,
 } from '@domain/repositories/task-repository';
 
 import { PrismaService } from '../prisma-service';
+import { CreateTaskDTO } from '@application/dtos/create-task-dto';
+import { UpdateTaskDTO } from '@application/dtos/update-task-dto';
 
 @Injectable()
 export class PrismaTaskRepository implements TaskRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(data: CreateTaskDto): Promise<Task> {
+  async create(data: CreateTaskDTO): Promise<Task> {
     const task = await this.prismaService.task.create({
       data,
     });
@@ -68,12 +68,11 @@ export class PrismaTaskRepository implements TaskRepository {
     );
   }
 
-  async update(id: string, data: UpdateTaskDto): Promise<Task> {
+  async update(id: string, data: UpdateTaskDTO): Promise<Task> {
     const task = await this.prismaService.task.update({
       where: { id },
       data: {
         ...data,
-        updatedAt: new Date(),
       },
     });
 
