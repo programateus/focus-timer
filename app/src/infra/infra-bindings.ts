@@ -6,6 +6,7 @@ import { axiosBinding } from "./axios/axios";
 import { cookiesBinding } from "./cookies/universal-cookies";
 import { httpProfileClientBinding } from "./clients/http-profile-client";
 import { httpTaskClientBinding } from "./clients/http-task-client";
+import { httpPomodoroClientBinding } from "./clients/http-pomodoro-client";
 
 export const infraBindings: BindingDefinition[] = [
   cookieTokenStorageBinding,
@@ -15,4 +16,5 @@ export const infraBindings: BindingDefinition[] = [
   httpAuthClientBinding,
   httpProfileClientBinding,
   httpTaskClientBinding,
+  httpPomodoroClientBinding,
 ];

@@ -5,7 +5,9 @@ import container from "@infra/inversify/container";
 import { AuthContext } from "@presentation/contexts/auth-context";
 import { ProfileDataLoaderUseCase } from "@application/use-cases/profile/profile-data-loader-use-case";
 import { SyncLocalTasksUseCase } from "@application/use-cases/task/sync-local-tasks-use-case";
+import { SyncLocalPomodorosUseCase } from "@application/use-cases/pomodoro/sync-local-pomodoros-use-case";
 import { useTaskStore } from "@presentation/stores/task-store";
+import { usePomodoroStore } from "@presentation/stores/pomodoro-store";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -13,12 +15,14 @@ type AuthProviderProps = {
 
 const profileDataLoaderUseCase = container.get(ProfileDataLoaderUseCase);
 const syncLocalTasksUseCase = container.get(SyncLocalTasksUseCase);
+const syncLocalPomodorosUseCase = container.get(SyncLocalPomodorosUseCase);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const { localTasks, clearLocalTasks } = useTaskStore();
+  const { sessions: localPomodoros, clearLocalPomodoros } = usePomodoroStore();
 
   const syncLocalTasks = useCallback(async () => {
     if (localTasks.length === 0) return;
@@ -32,6 +36,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [localTasks, clearLocalTasks]);
 
+  const syncLocalPomodoros = useCallback(async () => {
+    if (localPomodoros.length === 0) return;
+
+    try {
+      await syncLocalPomodorosUseCase.execute(localPomodoros);
+      clearLocalPomodoros();
+      console.log(
+        `${localPomodoros.length} pomodoros synchronized successfully!`
+      );
+    } catch (error) {
+      console.error("Failed to sync local pomodoros:", error);
+    }
+  }, [localPomodoros, clearLocalPomodoros]);
+
   const loadData = useCallback(async () => {
     try {
       const userData = await profileDataLoaderUseCase.execute();
@@ -42,7 +60,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setHasLoaded(true);
 
       if (!!userData && !wasLoggedIn) {
-        await syncLocalTasks();
+        await Promise.all([syncLocalTasks(), syncLocalPomodoros()]);
       }
     } catch (e) {
       console.log(e);
@@ -50,7 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(false);
       setHasLoaded(true);
     }
-  }, [isAuthenticated, syncLocalTasks]);
+  }, [isAuthenticated, syncLocalTasks, syncLocalPomodoros]);
 
   useEffect(() => {
     loadData();

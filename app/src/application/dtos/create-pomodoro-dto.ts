@@ -3,5 +3,5 @@ export interface CreatePomodoroDTO {
   duration: number;
   startedAt: Date;
   completedAt: Date;
-  type: 'work' | 'break';
+  type: "work" | "break";
 }

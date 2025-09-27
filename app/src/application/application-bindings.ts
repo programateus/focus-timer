@@ -7,6 +7,9 @@ import { listTaskUseCaseBinding } from "./use-cases/task/list-task-use-case";
 import { updateTaskUseCaseBinding } from "./use-cases/task/update-task-use-case";
 import { deleteTaskUseCaseBinding } from "./use-cases/task/delete-task-use-case";
 import { syncLocalTasksUseCaseBinding } from "./use-cases/task/sync-local-tasks-use-case";
+import { createPomodoroUseCaseBinding } from "./use-cases/pomodoro/create-pomodoro-use-case";
+import { listPomodoroUseCaseBinding } from "./use-cases/pomodoro/list-pomodoro-use-case";
+import { syncLocalPomodorosUseCaseBinding } from "./use-cases/pomodoro/sync-local-pomodoros-use-case";
 
 export const applicationBindings: BindingDefinition[] = [
   signUpUseCaseBinding,
@@ -17,4 +20,7 @@ export const applicationBindings: BindingDefinition[] = [
   updateTaskUseCaseBinding,
   deleteTaskUseCaseBinding,
   syncLocalTasksUseCaseBinding,
+  createPomodoroUseCaseBinding,
+  listPomodoroUseCaseBinding,
+  syncLocalPomodorosUseCaseBinding,
 ];

@@ -5,7 +5,11 @@ import { Icon } from "@presentation/components/icon";
 import { useCountdown } from "@presentation/hooks/use-countdown";
 import { useMemo, useEffect } from "react";
 import { useTasks } from "../../hooks/use-tasks";
-import { usePomodoroStore } from "../../stores/pomodoro-store";
+import {
+  usePomodoroStore,
+  type PomodoroSession,
+} from "../../stores/pomodoro-store";
+import { usePomodoros } from "../../hooks/use-pomodoros";
 
 interface TimerProps {
   initialMinutes: number;
@@ -13,7 +17,6 @@ interface TimerProps {
   progressColor?: "primary" | "success" | "warning";
   buttonColor?: "btn-primary" | "btn-success" | "btn-warning";
   type: "work" | "break";
-  onComplete?: () => void;
 }
 
 export const Timer = ({
@@ -22,10 +25,24 @@ export const Timer = ({
   progressColor = "primary",
   buttonColor = "btn-primary",
   type,
-  onComplete,
 }: TimerProps) => {
   const { selectedTask } = useTasks();
-  const { addSession, setCurrentSession, currentSession } = usePomodoroStore();
+  const { setCurrentSession, currentSession } = usePomodoroStore();
+  const { addPomodoro } = usePomodoros();
+
+  const handleSessionComplete = async (session: PomodoroSession) => {
+    try {
+      await addPomodoro({
+        taskId: session.taskId,
+        duration: session.duration,
+        startedAt: session.startedAt,
+        completedAt: session.completedAt,
+        type: session.type,
+      });
+    } catch (error) {
+      console.error("Failed to sync pomodoro:", error);
+    }
+  };
 
   const {
     formattedTime,
@@ -38,15 +55,15 @@ export const Timer = ({
     reset,
   } = useCountdown({
     initialMinutes,
-    onComplete: () => {
+    onComplete: async () => {
       if (currentSession && selectedTask) {
         const completedAt = new Date();
-        addSession({
+        const completedSession = {
           ...currentSession,
           completedAt,
-        });
+        };
+        await handleSessionComplete(completedSession);
       }
-      onComplete?.();
     },
   });
 
@@ -70,6 +87,14 @@ export const Timer = ({
   };
 
   const handleStop = () => {
+    handleSessionComplete({
+      id: currentSession?.id || crypto.randomUUID(),
+      taskId: currentSession?.taskId || selectedTask?.id || "",
+      duration: initialMinutes * 60 - time,
+      startedAt: currentSession?.startedAt || new Date(),
+      completedAt: new Date(),
+      type,
+    });
     setCurrentSession(null);
     stop();
   };

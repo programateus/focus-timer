@@ -9,14 +9,18 @@ export const PomodoroStats = () => {
   const completedTasks = tasks.filter((task) => task.completed).length;
   const totalTasks = tasks.length;
 
+  // include seconds in totalWorkTime
   const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    }
-    return `${minutes}m`;
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return [
+      hrs > 0 ? `${hrs}h` : null,
+      mins > 0 ? `${mins}m` : null,
+      `${secs}s`,
+    ]
+      .filter(Boolean)
+      .join(" ");
   };
 
   return (

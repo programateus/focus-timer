@@ -18,6 +18,8 @@ interface PomodoroState {
   setCurrentSession: (session: PomodoroSession | null) => void;
   addSession: (session: PomodoroSession) => void;
   setSessions: (sessions: PomodoroSession[]) => void;
+  clearLocalPomodoros: () => void;
+  setLocalPomodoros: (sessions: PomodoroSession[]) => void;
   getStats: () => {
     totalPomodoros: number;
     totalBreaks: number;
@@ -55,6 +57,8 @@ export const usePomodoroStore = create<PomodoroState>()(
         ).length;
         set({ sessions, totalPomodoros: pomodoros, totalBreaks: breaks });
       },
+      clearLocalPomodoros: () => set({ sessions: [] }),
+      setLocalPomodoros: (sessions) => set({ sessions }),
       getStats: () => {
         const { sessions } = get();
         const workSessions = sessions.filter(
