@@ -1,9 +1,9 @@
 import { usePomodoroStore } from "../../stores/pomodoro-store";
-import { useTaskStore } from "../../stores/task-store";
+import { useTasks } from "../../hooks/use-tasks";
 
 export const PomodoroStats = () => {
   const { getStats } = usePomodoroStore();
-  const { tasks } = useTaskStore();
+  const { tasks } = useTasks();
 
   const stats = getStats();
   const completedTasks = tasks.filter((task) => task.completed).length;

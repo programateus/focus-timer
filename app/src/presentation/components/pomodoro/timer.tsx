@@ -4,7 +4,7 @@ import { Button } from "@presentation/components/button";
 import { Icon } from "@presentation/components/icon";
 import { useCountdown } from "@presentation/hooks/use-countdown";
 import { useMemo, useEffect } from "react";
-import { useTaskStore } from "../../stores/task-store";
+import { useTasks } from "../../hooks/use-tasks";
 import { usePomodoroStore } from "../../stores/pomodoro-store";
 
 interface TimerProps {
@@ -24,7 +24,7 @@ export const Timer = ({
   type,
   onComplete,
 }: TimerProps) => {
-  const { selectedTask } = useTaskStore();
+  const { selectedTask } = useTasks();
   const { addSession, setCurrentSession, currentSession } = usePomodoroStore();
 
   const {

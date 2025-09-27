@@ -6,10 +6,11 @@ import container from "@infra/inversify/container";
 
 const listTaskUseCase = container.get(ListTaskUseCase);
 
-export const useListTask = () => {
+export const useListTask = (options?: { enabled?: boolean }) => {
   return useQuery({
     initialData: [],
     queryKey: queryKeys.task.list().queryKey,
     queryFn: () => listTaskUseCase.execute(),
+    ...options,
   });
 };

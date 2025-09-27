@@ -1,48 +1,70 @@
+import { useMemo } from "react";
+import { useAuth } from "./use-auth";
+import { useTaskStore } from "@presentation/stores/task-store";
 import { useListTask } from "./react-query/hooks/task/use-list-task";
 import { useCreateTask } from "./react-query/hooks/task/use-create-task";
 import { useUpdateTask } from "./react-query/hooks/task/use-update-task";
 import { useDeleteTask } from "./react-query/hooks/task/use-delete-task";
-import { useTaskStore } from "@presentation/stores/task-store";
 import type { CreateTaskDTO } from "@application/dtos/create-task-dto";
 import type { UpdateTaskDTO } from "@application/dtos/update-task-dto";
 
 export const useTasks = () => {
-  const { selectedTask, selectTask } = useTaskStore();
+  const { isAuthenticated } = useAuth();
+  const {
+    selectedTask,
+    localTasks,
+    selectTask,
+    addLocalTask,
+    updateLocalTask,
+    deleteLocalTask,
+  } = useTaskStore();
 
-  // React Query hooks para dados do servidor
-  const { data: tasks = [], isLoading, error } = useListTask();
+  const { data: serverTasks = [] } = useListTask({
+    enabled: isAuthenticated,
+  });
   const createTaskMutation = useCreateTask();
   const updateTaskMutation = useUpdateTask();
   const deleteTaskMutation = useDeleteTask();
 
+  const tasks = useMemo(() => {
+    return isAuthenticated ? serverTasks : localTasks;
+  }, [isAuthenticated, serverTasks, localTasks]);
+
   const addTask = async (data: CreateTaskDTO) => {
-    await createTaskMutation.mutateAsync(data);
+    if (isAuthenticated) {
+      return createTaskMutation.mutateAsync(data);
+    } else {
+      return addLocalTask(data);
+    }
   };
 
   const updateTask = async (id: string, data: UpdateTaskDTO) => {
-    await updateTaskMutation.mutateAsync({ id, data });
+    if (isAuthenticated) {
+      return updateTaskMutation.mutateAsync({ id, data });
+    } else {
+      updateLocalTask(id, data);
+    }
   };
 
   const deleteTask = async (id: string) => {
-    await deleteTaskMutation.mutateAsync(id);
+    if (isAuthenticated) {
+      return deleteTaskMutation.mutateAsync(id);
+    } else {
+      deleteLocalTask(id);
+    }
   };
 
   return {
-    // Dados do servidor (React Query)
     tasks,
-    isLoading,
-    error,
+    selectedTask,
+    selectTask,
     addTask,
     updateTask,
     deleteTask,
-
-    // Estado local (Zustand)
-    selectedTask,
-    selectTask,
-
-    // Status das mutations
-    isCreating: createTaskMutation.isPending,
-    isUpdating: updateTaskMutation.isPending,
-    isDeleting: deleteTaskMutation.isPending,
+    isLoading: isAuthenticated
+      ? createTaskMutation.isPending ||
+        updateTaskMutation.isPending ||
+        deleteTaskMutation.isPending
+      : false,
   };
 };
