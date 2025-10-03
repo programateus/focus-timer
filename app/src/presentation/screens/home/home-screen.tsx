@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@presentation/components/button";
 import { Icon } from "@presentation/components/icon";
 import { Task } from "@presentation/components/task";
-import { AuthAlert } from "@presentation/components/auth-alert";
+import { AuthAlert } from "@presentation/components/auth-alert/auth-alert";
 import { TaskSwitchDialog } from "@presentation/components/task-switch-dialog";
 import { TaskForm } from "@presentation/components/task-form";
 import { PomodoroStats } from "@presentation/components/pomodoro-stats";

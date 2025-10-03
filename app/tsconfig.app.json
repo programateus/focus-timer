@@ -11,7 +11,8 @@
       "@presentation/*": ["./src/presentation/*"],
       "@application/*": ["./src/application/*"],
       "@domain/*": ["./src/domain/*"],
-      "@infra/*": ["./src/infra/*"]
+      "@infra/*": ["./src/infra/*"],
+      "@tests/*": ["./tests/*"]
     },
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -30,7 +31,8 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }
