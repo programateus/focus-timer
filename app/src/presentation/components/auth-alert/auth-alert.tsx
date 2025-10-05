@@ -13,7 +13,11 @@ export const AuthAlert = () => {
   if (!isVisible || isAuthenticated) return null;
 
   return (
-    <div role="alert" className="alert alert-info mb-4 relative">
+    <div
+      role="alert"
+      className="alert alert-info mb-4 relative"
+      data-testid="auth-alert"
+    >
       <Icon Icon={RiUserLine} />
       <div className="flex-1">
         <h3 className="font-bold">Not logged in?</h3>

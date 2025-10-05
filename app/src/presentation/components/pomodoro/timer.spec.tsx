@@ -86,7 +86,6 @@ describe("Timer", () => {
     const startButton = screen.getByTestId("start-button");
     expect(startButton).not.toBeDisabled();
 
-    // Usar fireEvent ao invés de userEvent com fake timers
     await act(async () => {
       startButton.click();
     });

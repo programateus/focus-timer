@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
+import userEvents from "@testing-library/user-event";
 
 import { TaskForm } from "./task-form";
 import { useTasks } from "@presentation/hooks/use-tasks";
@@ -46,12 +47,8 @@ describe("TaskForm", () => {
     );
     const submitButton = screen.getByRole("button", { name: /Create Task/i });
 
-    await act(async () => {
-      fireEvent.change(titleInput, { target: { value: "New Task" } });
-      fireEvent.change(descriptionInput, {
-        target: { value: "Task Description" },
-      });
-    });
+    await userEvents.type(titleInput, "New Task");
+    await userEvents.type(descriptionInput, "Task Description");
 
     await act(async () => {
       submitButton.click();
@@ -82,12 +79,10 @@ describe("TaskForm", () => {
     );
     const submitButton = screen.getByRole("button", { name: /Update Task/i });
 
-    await act(async () => {
-      fireEvent.change(titleInput, { target: { value: "Updated Task" } });
-      fireEvent.change(descriptionInput, {
-        target: { value: "Updated Description" },
-      });
-    });
+    await userEvents.clear(titleInput);
+    await userEvents.clear(descriptionInput);
+    await userEvents.type(titleInput, "Updated Task");
+    await userEvents.type(descriptionInput, "Updated Description");
 
     await act(async () => {
       submitButton.click();

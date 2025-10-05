@@ -5,8 +5,8 @@ import { Textarea } from "./textarea";
 
 describe("Textarea", () => {
   it("should render", () => {
-    const { getByPlaceholderText } = render(<Textarea placeholder="test" />);
-    expect(getByPlaceholderText("test")).toBeInTheDocument();
+    render(<Textarea placeholder="test" />);
+    expect(screen.getByPlaceholderText("test")).toBeInTheDocument();
   });
 
   it("should render the floating label", () => {
@@ -16,17 +16,17 @@ describe("Textarea", () => {
   });
 
   it("should render helper text", () => {
-    const { getByText } = render(
+    render(
       <Textarea label="test" placeholder="test" helperText="Helper text" />
     );
-    expect(getByText("Helper text")).toBeInTheDocument();
+    expect(screen.getByText("Helper text")).toBeInTheDocument();
   });
 
   it("should render error state", () => {
-    const { getByText } = render(
+    render(
       <Textarea label="test" placeholder="test" helperText="Error text" error />
     );
-    expect(getByText("Error text")).toBeInTheDocument();
-    expect(getByText("Error text")).toHaveClass("text-error");
+    expect(screen.getByText("Error text")).toBeInTheDocument();
+    expect(screen.getByText("Error text")).toHaveClass("text-error");
   });
 });

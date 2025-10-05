@@ -15,7 +15,7 @@ export const usePomodoros = () => {
   const { data: serverPomodoros = [] } = useListPomodoro({
     enabled: isAuthenticated,
   });
-  const createPomodoroMutation = useCreatePomodoro();
+  const { mutateAsync: createPomodoro, isPending } = useCreatePomodoro();
 
   const pomodoros = useMemo(() => {
     return isAuthenticated ? serverPomodoros : localPomodoros;
@@ -23,7 +23,7 @@ export const usePomodoros = () => {
 
   const addPomodoro = async (data: CreatePomodoroDTO) => {
     if (isAuthenticated) {
-      return createPomodoroMutation.mutateAsync(data);
+      return createPomodoro(data);
     } else {
       const localPomodoro: PomodoroSession = {
         id: crypto.randomUUID(),
@@ -37,6 +37,6 @@ export const usePomodoros = () => {
   return {
     pomodoros,
     addPomodoro,
-    isLoading: isAuthenticated ? createPomodoroMutation.isPending : false,
+    isLoading: isAuthenticated ? isPending : false,
   };
 };

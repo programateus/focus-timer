@@ -53,7 +53,7 @@ export const HomeScreen = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto" data-testid="home-screen">
       <div className="md:h-screen flex flex-col p-12">
         <AuthAlert />
         <div className="flex flex-1 gap-8">

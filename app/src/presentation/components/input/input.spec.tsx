@@ -7,8 +7,8 @@ import { HiMail } from "react-icons/hi";
 
 describe("Input", () => {
   it("should render", () => {
-    const { getByPlaceholderText } = render(<Input placeholder="test" />);
-    expect(getByPlaceholderText("test")).toBeInTheDocument();
+    render(<Input placeholder="test" />);
+    expect(screen.getByPlaceholderText("test")).toBeInTheDocument();
   });
 
   it("should render the floating label", () => {
@@ -18,7 +18,7 @@ describe("Input", () => {
   });
 
   it("should render icon to the left", () => {
-    const { getByTestId } = render(
+    render(
       <Input
         label="test"
         placeholder="test"
@@ -26,13 +26,13 @@ describe("Input", () => {
         iconPosition="left"
       />
     );
-    const icon = getByTestId("icon");
+    const icon = screen.getByTestId("icon");
     expect(icon).toBeInTheDocument();
     expect(icon.nextSibling).toHaveAttribute("placeholder", "test");
   });
 
   it("should render icon to the right", () => {
-    const { getByTestId } = render(
+    render(
       <Input
         label="test"
         placeholder="test"
@@ -40,23 +40,21 @@ describe("Input", () => {
         iconPosition="right"
       />
     );
-    const icon = getByTestId("icon");
+    const icon = screen.getByTestId("icon");
     expect(icon).toBeInTheDocument();
     expect(icon.previousSibling).toHaveAttribute("placeholder", "test");
   });
 
   it("should render helper text", () => {
-    const { getByText } = render(
-      <Input label="test" placeholder="test" helperText="Helper text" />
-    );
-    expect(getByText("Helper text")).toBeInTheDocument();
+    render(<Input label="test" placeholder="test" helperText="Helper text" />);
+    expect(screen.getByText("Helper text")).toBeInTheDocument();
   });
 
   it("should render error state", () => {
-    const { getByText } = render(
+    render(
       <Input label="test" placeholder="test" helperText="Error text" error />
     );
-    expect(getByText("Error text")).toBeInTheDocument();
-    expect(getByText("Error text")).toHaveClass("text-error");
+    expect(screen.getByText("Error text")).toBeInTheDocument();
+    expect(screen.getByText("Error text")).toHaveClass("text-error");
   });
 });
