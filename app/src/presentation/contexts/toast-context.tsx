@@ -13,7 +13,7 @@ export type ToastPosition =
   | "middle"
   | "bottom";
 
-type ToastContextParams = {
+export type ToastContextParams = {
   position: ToastPosition;
   duration: number;
   setPosition: (position: ToastPosition) => void;

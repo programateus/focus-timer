@@ -100,10 +100,8 @@ export const Timer = ({
   };
 
   useEffect(() => {
-    if (!isRunning) {
-      reset();
-    }
-  }, [selectedTask?.id, reset, isRunning]);
+    reset();
+  }, [selectedTask?.id, reset]);
 
   useEffect(() => {
     if (!currentSession) {
@@ -121,9 +119,18 @@ export const Timer = ({
   }, [currentSession?.startedAt, time, isRunning]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-4 min-w-0">
+    <div
+      className="flex flex-col items-center justify-center h-full gap-4 min-w-0"
+      data-testid="timer-component"
+      aria-label={`${title} timer`}
+    >
       <div className="flex flex-col space-y-4 my-auto w-full min-w-0">
-        <div className="flex flex-col items-center max-w-[270px] mx-auto">
+        <div
+          className="flex flex-col items-center max-w-[270px] mx-auto"
+          role="timer"
+          aria-label={`${title} timer: ${formattedTime}`}
+          data-testid="timer-display"
+        >
           <span className="text-8xl font-mono tabular-nums">
             {formattedTime}
           </span>
@@ -154,12 +161,17 @@ export const Timer = ({
             onClick={handleStart}
             className={buttonColor}
             disabled={type === "work" && !selectedTask}
+            data-testid="start-button"
           >
             <Icon Icon={RiPlayFill} />
             Start
           </Button>
         ) : (
-          <Button onClick={handlePause} className="btn-warning">
+          <Button
+            onClick={handlePause}
+            className="btn-warning"
+            data-testid="pause-button"
+          >
             <Icon Icon={RiPauseFill} />
             Pause
           </Button>
@@ -169,6 +181,7 @@ export const Timer = ({
           onClick={handleStop}
           className="btn-outline"
           disabled={!isRunning}
+          data-testid="stop-button"
         >
           <Icon Icon={RiStopFill} />
           Stop

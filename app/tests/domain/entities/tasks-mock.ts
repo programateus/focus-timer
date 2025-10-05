@@ -3,7 +3,7 @@ import { createId } from "@paralleldrive/cuid2";
 
 import { Task } from "@domain/entities/task";
 
-export const generateTask = (): Task => {
+export const generateTask = (data?: Partial<Task>): Task => {
   return {
     id: createId(),
     title: faker.lorem.words(3),
@@ -11,5 +11,6 @@ export const generateTask = (): Task => {
     completed: faker.datatype.boolean(),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
+    ...(data ?? {}),
   };
 };

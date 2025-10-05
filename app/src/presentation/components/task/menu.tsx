@@ -28,6 +28,8 @@ export const TaskMenu = ({ onUpdate, onDelete }: TaskMenuProps) => {
         onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
           e.stopPropagation()
         }
+        aria-label="Task menu"
+        role="button"
       >
         <Icon Icon={RiMore2Fill} />
       </MenuButton>
@@ -36,10 +38,24 @@ export const TaskMenu = ({ onUpdate, onDelete }: TaskMenuProps) => {
         className="menu [--anchor-gap:8px] bg-base-100 rounded-box min-w-80 lg:min-w-64 z-10 border-base-content/10 border shadow-lg focus:outline-none focus-visible:outline-none focus-within:outline-none"
       >
         <MenuItem as="li">
-          <button onClick={handleUpdate}>Update</button>
+          <button
+            type="button"
+            onClick={handleUpdate}
+            role="button"
+            aria-label="Update task"
+          >
+            Update
+          </button>
         </MenuItem>
         <MenuItem as="li">
-          <button onClick={handleDelete}>Delete</button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            role="button"
+            aria-label="Delete task"
+          >
+            Delete
+          </button>
         </MenuItem>
       </MenuItems>
     </Menu>
